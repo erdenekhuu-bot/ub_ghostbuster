@@ -2,6 +2,7 @@ package mn.erdenee.mn_ghostbuster.screen.home
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +35,7 @@ import mn.erdenee.mn_ghostbuster.screen.CaseScreen
 import mn.erdenee.mn_ghostbuster.screen.MapScreen
 import mn.erdenee.mn_ghostbuster.screen.MemberScreen
 
-class HomeActivity : AppCompatActivity(){
+class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -98,4 +99,4 @@ fun HomeScreen(){
             }
         }
     }
-}
+    }

@@ -42,9 +42,9 @@ android {
 }
 
 dependencies {
-    val composeBom = platform("androidx.compose:compose-bom:2024.02.00")
-    val nav_version = "2.9.7"
+    val composeBom = platform("androidx.compose:compose-bom:2024.12.01")
     implementation(composeBom)
+    val nav_version = "2.9.7"
     implementation("androidx.compose.ui:ui")
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation("androidx.compose.material3:material3")
@@ -59,4 +59,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation("com.google.maps.android:maps-compose:6.1.2")
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
 }
