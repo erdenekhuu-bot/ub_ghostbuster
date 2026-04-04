@@ -2,6 +2,8 @@ package mn.erdenee.mn_ghostbuster.screen.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
@@ -38,6 +40,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import mn.erdenee.mn_ghostbuster.R
+import mn.erdenee.mn_ghostbuster.api.APIClient
+import mn.erdenee.mn_ghostbuster.api.LoginRequest
+import mn.erdenee.mn_ghostbuster.api.RetrofitCLient
 import mn.erdenee.mn_ghostbuster.screen.home.HomeActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -95,7 +100,19 @@ fun LoginScreen(){
         Spacer(modifier = Modifier.height(20.dp))
         Button(
             onClick = {
-                context.startActivity(Intent(context, HomeActivity::class.java))
+                try {
+                    val apiService = RetrofitCLient().getInstance().create(APIClient::class.java)
+                    val request = LoginRequest(username, password)
+                    val response = apiService.login(request)
+                    if(response.isSuccessful){
+                        context.startActivity(Intent(context, HomeActivity::class.java))
+                    } else {
+                        Toast.makeText(context, "Login failed: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception){
+                    Log.d("Error",e.message.toString())
+                    Toast.makeText(context, "Connection Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
             },
             modifier = Modifier
                 .padding(16.dp)
