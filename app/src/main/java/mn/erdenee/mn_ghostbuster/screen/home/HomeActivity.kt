@@ -1,5 +1,6 @@
 package mn.erdenee.mn_ghostbuster.screen.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 
@@ -28,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
@@ -38,6 +40,7 @@ import mn.erdenee.mn_ghostbuster.BottomNavItem
 import mn.erdenee.mn_ghostbuster.screen.CaseScreen
 import mn.erdenee.mn_ghostbuster.screen.MapScreen
 import mn.erdenee.mn_ghostbuster.screen.MemberScreen
+import mn.erdenee.mn_ghostbuster.screen.UploadActivity
 
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +60,7 @@ class HomeActivity : AppCompatActivity() {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreen(){
+    val context = LocalContext.current
     val navController = rememberNavController()
     val navItems = listOf(
         BottomNavItem("Case", Icons.Default.CheckCircle, "Case"),
@@ -75,7 +79,9 @@ fun HomeScreen(){
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {},
+                onClick = {
+                    context.startActivity(Intent(context, UploadActivity::class.java))
+                },
                 shape = CircleShape,
                 modifier = Modifier.padding(16.dp)
             ) {
