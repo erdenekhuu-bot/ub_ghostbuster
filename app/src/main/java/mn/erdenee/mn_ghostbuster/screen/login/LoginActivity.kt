@@ -104,10 +104,10 @@ fun LoginScreen(){
                     val apiService = RetrofitCLient().getInstance().create(APIClient::class.java)
                     val request = LoginRequest(username, password)
                     val response = apiService.login(request)
-                    if(response.isSuccessful){
+                    if(response.isExecuted){
                         context.startActivity(Intent(context, HomeActivity::class.java))
                     } else {
-                        Toast.makeText(context, "Login failed: ${response.code()}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Login failed: ${response}", Toast.LENGTH_SHORT).show()
                     }
                 } catch (e: Exception){
                     Log.d("Error",e.message.toString())
