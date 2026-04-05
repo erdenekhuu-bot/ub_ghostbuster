@@ -27,22 +27,32 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.coroutineScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 import mn.erdenee.mn_ghostbuster.BottomNavItem
+import mn.erdenee.mn_ghostbuster.api.APIClient
+import mn.erdenee.mn_ghostbuster.api.RetrofitCLient
 import mn.erdenee.mn_ghostbuster.screen.CaseScreen
 import mn.erdenee.mn_ghostbuster.screen.MapScreen
 import mn.erdenee.mn_ghostbuster.screen.MemberScreen
 import mn.erdenee.mn_ghostbuster.screen.UploadActivity
+import mn.erdenee.mn_ghostbuster.api.TokenData
 
 class HomeActivity : AppCompatActivity() {
+
+    private var tokenInfo by mutableStateOf<TokenData?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -56,6 +66,7 @@ class HomeActivity : AppCompatActivity() {
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
@@ -67,6 +78,7 @@ fun HomeScreen(){
         BottomNavItem("Map", Icons.Default.LocationOn, "Map"),
         BottomNavItem("Member", Icons.Default.Person, "Member"),
     )
+
     Scaffold(
         topBar = {
             TopAppBar(

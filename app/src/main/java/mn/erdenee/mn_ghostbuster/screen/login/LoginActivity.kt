@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -29,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,9 +41,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import mn.erdenee.mn_ghostbuster.R
 import mn.erdenee.mn_ghostbuster.api.APIClient
 import mn.erdenee.mn_ghostbuster.api.LoginRequest
+import mn.erdenee.mn_ghostbuster.api.LoginResponse
 import mn.erdenee.mn_ghostbuster.api.RetrofitCLient
 import mn.erdenee.mn_ghostbuster.screen.home.HomeActivity
 
@@ -62,7 +66,10 @@ class LoginActivity : AppCompatActivity() {
 fun LoginScreen(){
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -98,27 +105,38 @@ fun LoginScreen(){
             shape = RoundedCornerShape(8.dp),
         )
         Spacer(modifier = Modifier.height(20.dp))
-        Button(
-            onClick = {
-                try {
-                    val apiService = RetrofitCLient().getInstance().create(APIClient::class.java)
-                    val request = LoginRequest(username, password)
-                    val response = apiService.login(request)
-                    if(response.isExecuted){
-                        context.startActivity(Intent(context, HomeActivity::class.java))
-                    } else {
-                        Toast.makeText(context, "Login failed: ${response}", Toast.LENGTH_SHORT).show()
+
+        if (isLoading) {
+            CircularProgressIndicator()
+        } else {
+            Button(
+                onClick = {
+                    isLoading = true
+                    scope.launch {
+                        try {
+                            val apiService = RetrofitCLient().getInstance().create(APIClient::class.java)
+                            val request = LoginRequest(username, password)
+                            val response = apiService.login(request)
+
+                            if (response.isSuccessful) {
+                                Log.d("response", response.body().toString())
+                                context.startActivity(Intent(context, HomeActivity::class.java))
+                            } else {
+                                Log.d("response", "Login Failed: ${response.code()}")
+                                Toast.makeText(context, "Login failed: ${response.message()}", Toast.LENGTH_SHORT).show()
+                            }
+                        } catch (e: Exception) {
+                            Log.e("Error", "Connection Error", e)
+                            Toast.makeText(context, "Connection Error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                        } finally {
+                            isLoading = false
+                        }
                     }
-                } catch (e: Exception){
-                    Log.d("Error",e.message.toString())
-                    Toast.makeText(context, "Connection Error: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-            },
-            modifier = Modifier
-                .padding(16.dp)
-        ) {
-            Text("Login in")
+                },
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text("Login in")
+            }
         }
     }
-
 }
