@@ -5,14 +5,12 @@ plugins {
 
 android {
     namespace = "mn.erdenee.mn_ghostbuster"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "mn.erdenee.mn_ghostbuster"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -34,10 +32,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
-        compose=true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        compose = true
     }
 }
 
@@ -61,6 +56,9 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("com.google.maps.android:maps-compose:6.1.2")
     implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }

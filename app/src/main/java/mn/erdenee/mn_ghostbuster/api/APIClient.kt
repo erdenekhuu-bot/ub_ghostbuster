@@ -6,9 +6,11 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 
 interface APIClient {
@@ -16,7 +18,7 @@ interface APIClient {
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
     @Multipart
-    @POST("location/")
+    @PUT("location/")
     suspend fun uploadLocation(
         @Header("Authorization") token: String,
         @Part("title") title: RequestBody,
@@ -25,6 +27,11 @@ interface APIClient {
         @Part image: List<MultipartBody.Part>,
         @Part video: List<MultipartBody.Part>
     ): Response<Unit>
+
+    @GET
+    suspend fun readlocations(
+        @Header("Authorization") token: String,
+    )
 }
 
 data class LoginResponse(
