@@ -45,8 +45,8 @@ import kotlinx.coroutines.launch
 import mn.erdenee.mn_ghostbuster.R
 import mn.erdenee.mn_ghostbuster.api.APIClient
 import mn.erdenee.mn_ghostbuster.api.LoginRequest
-import mn.erdenee.mn_ghostbuster.api.LoginResponse
 import mn.erdenee.mn_ghostbuster.api.RetrofitCLient
+import mn.erdenee.mn_ghostbuster.api.SessionManager
 import mn.erdenee.mn_ghostbuster.screen.home.HomeActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -69,6 +69,7 @@ fun LoginScreen(){
     var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val sessionManager = remember { SessionManager(context) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -117,10 +118,16 @@ fun LoginScreen(){
                             val apiService = RetrofitCLient().getInstance().create(APIClient::class.java)
                             val request = LoginRequest(username, password)
                             val response = apiService.login(request)
-
                             if (response.isSuccessful) {
-                                Log.d("response", response.body().toString())
-                                context.startActivity(Intent(context, HomeActivity::class.java))
+                                val loginResponse = response.body()
+                                loginResponse?.tokens?.let { tokens ->
+                                    sessionManager.saveTokens(tokens.access, tokens.refresh)
+                                    Log.d("response", "Tokens saved successfully")
+                                    context.startActivity(Intent(context, HomeActivity::class.java))
+                                } ?: run {
+                                    Log.d("response", "Tokens were null in response body")
+                                    Toast.makeText(context, "Unexpected response from server", Toast.LENGTH_SHORT).show()
+                                }
                             } else {
                                 Log.d("response", "Login Failed: ${response.code()}")
                                 Toast.makeText(context, "Login failed: ${response.message()}", Toast.LENGTH_SHORT).show()
