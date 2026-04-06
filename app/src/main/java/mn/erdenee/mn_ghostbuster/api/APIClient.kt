@@ -49,7 +49,7 @@ data class LoginRequest(
 )
 
 class RetrofitCLient {
-    private val baseUrl = "http://192.168.6.144:8000/api/"
+    private val baseUrl = "https://ghostbuster-e0mz.onrender.com/api/" //free hosted on render.com
 
     fun getInstance(): Retrofit {
         return Retrofit.Builder()
