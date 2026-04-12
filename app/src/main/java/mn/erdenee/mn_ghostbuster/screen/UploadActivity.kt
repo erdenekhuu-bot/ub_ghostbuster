@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -71,6 +72,8 @@ class UploadActivity : AppCompatActivity() {
     }
 }
 // ai added here
+
+@Preview(showBackground = true)
 @Composable
 fun UploadScreen() {
     val context = LocalContext.current
@@ -135,9 +138,8 @@ fun UploadScreen() {
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Create New Location", style = MaterialTheme.typography.headlineMedium)
+        Text("Шинэ байршил нэмэх", style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(16.dp))
-
         OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text("Title") }, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(value = description, onValueChange = { description = it }, label = { Text("Description") }, modifier = Modifier.fillMaxWidth())
         
@@ -168,9 +170,7 @@ fun UploadScreen() {
                 )
             }
         )
-
         Spacer(modifier = Modifier.height(16.dp))
-
         if (selectedImageUri != null) {
             Image(
                 painter = rememberAsyncImagePainter(selectedImageUri),
@@ -181,23 +181,6 @@ fun UploadScreen() {
                     .padding(8.dp),
                 contentScale = ContentScale.Crop
             )
-        }
-
-        Button(onClick = {
-            val permissionCheckResult = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
-            if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                val uri = FileProvider.getUriForFile(
-                    Objects.requireNonNull(context),
-                    context.packageName + ".fileprovider",
-                    createTempFile(context)
-                )
-                tempImageUri = uri
-                cameraLauncher.launch(uri)
-            } else {
-                cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
-            }
-        }) {
-            Text("Take Photo with Camera")
         }
 
         Button(onClick = { imagePicker.launch("image/*") }) {
@@ -314,16 +297,25 @@ private fun createTempFile(context: Context): File {
 
 private fun getFileFromUri(context: Context, uri: Uri, defaultName: String): File {
     val contentResolver = context.contentResolver
-    val fileName = contentResolver.query(uri, null, null, null, null)?.use { cursor ->
-        val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-        if (cursor.moveToFirst()) cursor.getString(nameIndex) else defaultName
+
+    val fileName = try {
+        contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+            val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            if (nameIndex != -1 && cursor.moveToFirst()) cursor.getString(nameIndex) else null
+        }
+    } catch (e: Exception) {
+        null
     } ?: defaultName
 
     val file = File(context.cacheDir, fileName)
-    contentResolver.openInputStream(uri)?.use { input ->
-        FileOutputStream(file).use { output ->
-            input.copyTo(output)
+    try {
+        contentResolver.openInputStream(uri)?.use { input ->
+            FileOutputStream(file).use { output ->
+                input.copyTo(output)
+            }
         }
+    } catch (e: Exception) {
+        Log.e("Upload", "Error copying file", e)
     }
     return file
 }
