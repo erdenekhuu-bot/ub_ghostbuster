@@ -33,7 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import mn.erdenee.mn_ghostbuster.api.APIClient
-import mn.erdenee.mn_ghostbuster.api.LocationResult
+import mn.erdenee.mn_ghostbuster.types.LocationResult
 import mn.erdenee.mn_ghostbuster.api.RetrofitCLient
 import mn.erdenee.mn_ghostbuster.api.SessionManager
 import mn.erdenee.mn_ghostbuster.ui.BoxUI

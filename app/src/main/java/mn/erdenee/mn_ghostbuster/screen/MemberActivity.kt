@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import mn.erdenee.mn_ghostbuster.api.APIClient
 import mn.erdenee.mn_ghostbuster.api.RetrofitCLient
-import mn.erdenee.mn_ghostbuster.api.UserResult
+import mn.erdenee.mn_ghostbuster.types.UserResult
 import mn.erdenee.mn_ghostbuster.ui.BoxUI
 import mn.erdenee.mn_ghostbuster.api.SessionManager
 

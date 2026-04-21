@@ -1,7 +1,6 @@
 package mn.erdenee.mn_ghostbuster
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.compose.setContent
 import mn.erdenee.mn_ghostbuster.screen.login.LoginScreen
@@ -13,7 +12,6 @@ class MainActivity : AppCompatActivity() {
             LoginScreen()
         }
     }
-
     @Override
     override fun onStart() {
         super.onStart()

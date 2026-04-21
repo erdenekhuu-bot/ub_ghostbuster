@@ -28,13 +28,9 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import kotlinx.coroutines.launch
 import mn.erdenee.mn_ghostbuster.api.APIClient
-import mn.erdenee.mn_ghostbuster.api.LocationResult
+import mn.erdenee.mn_ghostbuster.types.LocationResult
 import mn.erdenee.mn_ghostbuster.api.RetrofitCLient
 import mn.erdenee.mn_ghostbuster.api.SessionManager
-import androidx.compose.material.icons.outlined.Tornado
-import androidx.compose.ui.graphics.Canvas
-import androidx.core.content.ContextCompat
-import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
 class MapActivity : AppCompatActivity() {
