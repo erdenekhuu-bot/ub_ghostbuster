@@ -251,8 +251,8 @@ fun LoginScreen(){
                 verticalAlignment = Alignment.Bottom
             ) {
                 Column {
-                    Text("40.7128° N", color = Color(0xFF4D7C0F), fontSize = 9.sp, fontFamily = FontFamily.Monospace)
-                    Text("74.0060° W", color = Color(0xFF4D7C0F), fontSize = 9.sp, fontFamily = FontFamily.Monospace)
+                    Text("40.7128°", color = Color(0xFF4D7C0F), fontSize = 9.sp, fontFamily = FontFamily.Monospace)
+                    Text("74.0060°", color = Color(0xFF4D7C0F), fontSize = 9.sp, fontFamily = FontFamily.Monospace)
                 }
                 Text("БОЛГООМЖТОЙ БАЙГААРАЙ", color = Color(0xFF4B5563), fontSize = 9.sp, fontFamily = FontFamily.Monospace)
             }
