@@ -47,6 +47,9 @@ interface APIClient {
     suspend fun readlocations(
         @Header("Authorization") token: String,
     )
+
+    @POST("register/")
+    suspend fun register(@Body requestBody: RegisterRequest): Response<RegisterResponse>
 }
 class RetrofitCLient {
     private val baseUrl = "https://ghostbuster-e0mz.onrender.com/api/"

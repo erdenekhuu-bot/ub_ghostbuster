@@ -58,8 +58,6 @@ fun MapScreen() {
     val context = LocalContext.current
     val sessionManager = remember { SessionManager(context) }
     val token = sessionManager.getAccessToken() ?: ""
-
-    // Dark Map Style JSON
     val darkMapStyle = """
         [
           { "elementType": "geometry", "stylers": [ { "color": "#212121" } ] },
@@ -105,7 +103,6 @@ fun MapScreen() {
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // 1. Google Map Background
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
@@ -124,37 +121,33 @@ fun MapScreen() {
                             icon = BitmapDescriptorFactory.defaultMarker(
                                 if (location.id % 2 == 0) BitmapDescriptorFactory.HUE_GREEN else BitmapDescriptorFactory.HUE_VIOLET
                             ),
-                            onClick = {
-                                selectedLocation = location
-                                false
-                            }
                         )
                     }
                 }
             }
         }
 
-        // 2. Top Bar Overlay
-        TopMapOverlay()
-
-        // 3. Bottom Detail Panel & FAB
-        Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-            Column(horizontalAlignment = Alignment.End) {
-                // Neon FAB
-                FloatingActionButton(
-                    onClick = { /* Add Action */ },
-                    containerColor = Color(0xFF99FF00),
-                    contentColor = Color.Black,
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier.padding(16.dp).size(56.dp)
-                ) {
-                    Icon(Icons.Default.Add, contentDescription = "Add")
-                }
-
-                // Info Sheet (Persistent Overlay Style)
-                LocationDetailSheet(selectedLocation)
-            }
-        }
+//        // 2. Top Bar Overlay
+//        TopMapOverlay()
+//
+//        // 3. Bottom Detail Panel & FAB
+//        Box(modifier = Modifier.align(Alignment.BottomCenter)) {
+//            Column(horizontalAlignment = Alignment.End) {
+//                // Neon FAB
+//                FloatingActionButton(
+//                    onClick = { /* Add Action */ },
+//                    containerColor = Color(0xFF99FF00),
+//                    contentColor = Color.Black,
+//                    shape = RoundedCornerShape(12.dp),
+//                    modifier = Modifier.padding(16.dp).size(56.dp)
+//                ) {
+//                    Icon(Icons.Default.Add, contentDescription = "Add")
+//                }
+//
+//                // Info Sheet (Persistent Overlay Style)
+//                LocationDetailSheet(selectedLocation)
+//            }
+//        }
     }
 }
 
@@ -184,7 +177,7 @@ fun TopMapOverlay() {
                 letterSpacing = 2.sp
             )
         }
-        
+
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Default.FilterList, contentDescription = "Filter", tint = Color.Gray)
             Spacer(modifier = Modifier.width(16.dp))
@@ -208,9 +201,8 @@ fun TopMapOverlay() {
 
 @Composable
 fun LocationDetailSheet(location: LocationResult?) {
-    // If no location is selected, show a default or empty sheet matching the design
     val displayTitle = location?.title ?: "Select a point"
-    
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -251,7 +243,7 @@ fun LocationDetailSheet(location: LocationResult?) {
                     )
                     Text("2.4km • Last ping 14m ago", color = Color.Gray, fontSize = 12.sp)
                 }
-                
+
                 Column(horizontalAlignment = Alignment.End) {
                     Text("98.4 μT", color = Color(0xFF99FF00), fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     Text("EMF INTENSITY", color = Color.Gray, fontSize = 9.sp, fontWeight = FontWeight.Bold)
@@ -260,7 +252,6 @@ fun LocationDetailSheet(location: LocationResult?) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Info Cards
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 MetricCard("THERMAL DROP", "-12.4°C", Modifier.weight(1f))
                 MetricCard("EVP PROBABILITY", "84%", Modifier.weight(1f))

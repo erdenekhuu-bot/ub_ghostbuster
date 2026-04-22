@@ -37,6 +37,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     val composeBom = platform("androidx.compose:compose-bom:2024.12.01")
     implementation(composeBom)
     val nav_version = "2.9.7"

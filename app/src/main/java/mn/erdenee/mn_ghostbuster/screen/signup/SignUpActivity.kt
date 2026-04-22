@@ -1,10 +1,11 @@
-package mn.erdenee.mn_ghostbuster.screen.login
+package mn.erdenee.mn_ghostbuster.screen.signup
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import mn.erdenee.mn_ghostbuster.R
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,10 +28,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -53,38 +52,32 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
-import mn.erdenee.mn_ghostbuster.R
 import mn.erdenee.mn_ghostbuster.api.APIClient
-import mn.erdenee.mn_ghostbuster.types.LoginRequest
 import mn.erdenee.mn_ghostbuster.api.RetrofitCLient
-import mn.erdenee.mn_ghostbuster.api.SessionManager
-import mn.erdenee.mn_ghostbuster.screen.home.HomeActivity
-import mn.erdenee.mn_ghostbuster.screen.signup.SignUpActivity
+import mn.erdenee.mn_ghostbuster.screen.login.LoginActivity
+import mn.erdenee.mn_ghostbuster.types.RegisterRequest
 
-class LoginActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Surface(modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background){
-                LoginScreen()
-            }
+            SignUpScreen()
         }
     }
 }
 
 @Preview(showBackground = true, device = "spec:width=411dp,height=891dp")
 @Composable
-fun LoginScreen(){
+fun SignUpScreen(){
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
+    var phone by remember { mutableStateOf("") }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val sessionManager = remember { SessionManager(context) }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Background Image with dark overlay
+
         Image(
             painter = painterResource(R.drawable.backgroundlayer),
             contentDescription = null,
@@ -98,7 +91,6 @@ fun LoginScreen(){
                 .fillMaxSize()
                 .padding(horizontal = 24.dp, vertical = 32.dp)
         ) {
-            // Top Status Bar
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -125,7 +117,6 @@ fun LoginScreen(){
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Central Auth Panel
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -162,9 +153,8 @@ fun LoginScreen(){
                     singleLine = true
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
-                // FREQUENCY KEY
                 AuthInputFieldLabel("НУУЦ ҮГ")
                 OutlinedTextField(
                     value = password,
@@ -177,7 +167,20 @@ fun LoginScreen(){
                     singleLine = true
                 )
 
-                Spacer(modifier = Modifier.height(48.dp))
+                Spacer(modifier = Modifier.height(10.dp))
+
+                AuthInputFieldLabel("УТАСНЫ ДУГААР")
+                OutlinedTextField(
+                    value = phone,
+                    onValueChange = { phone = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    placeholder = {Text("Утасны дугаар",color = Color(0xFF374151))},
+                    colors = authTextFieldColors(),
+                    shape = RoundedCornerShape(12.dp),
+                    singleLine = true
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
 
                 if (isLoading) {
                     CircularProgressIndicator(color = Color(0xFFA78BFA))
@@ -189,22 +192,17 @@ fun LoginScreen(){
                         onClick = {
                             isLoading = true
                             scope.launch {
-                                try {
-                                    val apiService = RetrofitCLient().getInstance().create(APIClient::class.java)
-                                    val request = LoginRequest(username, password)
-                                    val response = apiService.login(request)
-                                    if (response.isSuccessful) {
-                                        val loginResponse = response.body()
-                                        loginResponse?.tokens?.let { tokens ->
-                                            sessionManager.saveTokens(tokens.access, tokens.refresh)
-                                            context.startActivity(Intent(context, HomeActivity::class.java))
-                                        }
-                                    }
-                                } catch (e: Exception) {
-                                    Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-                                } finally {
-                                    isLoading = false
-                                }
+                               try {
+                                   val apiService = RetrofitCLient().getInstance().create(APIClient::class.java)
+                                   val request = RegisterRequest(username, password,phone)
+                                   val response = apiService.register(request)
+                                   if(response.isSuccessful) context.startActivity(Intent(context, LoginActivity::class.java))
+
+                               } catch (e: Exception){
+                                   Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                               } finally {
+                                   isLoading = false
+                               }
                             }
                         },
                         modifier = Modifier
@@ -216,7 +214,7 @@ fun LoginScreen(){
                         contentPadding = PaddingValues(0.dp)
                     ) {
                         Text(
-                            "НЭВТРЭХ",
+                            "Бүртгүүлэх",
                             color = Color(0xFF1E1B4B),
                             fontWeight = FontWeight.Black,
                             fontSize = 18.sp
@@ -226,21 +224,15 @@ fun LoginScreen(){
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                Text(
-                    "НУУЦ ҮГЭЭ МАРТЧИХСАН УУ?",
-                    color = Color(0xFF6B7280),
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold
-                )
 
                 Spacer(modifier = Modifier.height(20.dp))
                 Box(modifier = Modifier.width(40.dp).height(1.dp).background(Color(0xFF262626)))
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Row {
-                    Text("Шинэ гишүүн үү? ", color = Color(0xFF6B7280), fontSize = 12.sp)
-                    Text("Бүртгүүлээрэй", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold, modifier = Modifier.clickable{
-                        context.startActivity(Intent(context, SignUpActivity::class.java))
+                    Text("Бүртгэлтэй гишүүн үү? ", color = Color(0xFF6B7280), fontSize = 12.sp)
+                    Text("Нэвтрээрэй",  color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold, modifier = Modifier.clickable{
+                        context.startActivity(Intent(context, LoginActivity::class.java))
                     })
                 }
             }
@@ -279,7 +271,7 @@ private fun authTextFieldColors() = OutlinedTextFieldDefaults.colors(
     unfocusedContainerColor = Color(0xFF070707),
     focusedTextColor = Color.White,
     unfocusedTextColor = Color.White,
-    focusedBorderColor = Color(0xFF166534), // Subtle green glow
-    unfocusedBorderColor = Color(0xFF1F2937), // Dark grey
+    focusedBorderColor = Color(0xFF166534),
+    unfocusedBorderColor = Color(0xFF1F2937),
     cursorColor = Color(0xFF22C55E)
 )
