@@ -44,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -82,9 +83,10 @@ fun LoginScreen(){
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val sessionManager = remember { SessionManager(context) }
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp.dp
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Background Image with dark overlay
         Image(
             painter = painterResource(R.drawable.backgroundlayer),
             contentDescription = null,
@@ -96,9 +98,8 @@ fun LoginScreen(){
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp, vertical = 32.dp)
+                .padding(horizontal = 24.dp, vertical = screenWidthDp * 0.1f)
         ) {
-            // Top Status Bar
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -122,16 +123,14 @@ fun LoginScreen(){
                 }
 
             }
+            Spacer(modifier = Modifier.height(screenWidthDp * 0.15f))
 
-            Spacer(modifier = Modifier.weight(1f))
-
-            // Central Auth Panel
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(40.dp))
                     .background(Color(0xE6111111))
-                    .padding(horizontal = 24.dp, vertical = 44.dp),
+                    .padding(horizontal = 24.dp, vertical = screenWidthDp * 0.15f),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -149,7 +148,7 @@ fun LoginScreen(){
                     modifier = Modifier.padding(top = 8.dp)
                 )
 
-                Spacer(modifier = Modifier.height(48.dp))
+                Spacer(modifier = Modifier.height(30.dp))
 
                 AuthInputFieldLabel("БҮРТГҮҮЛЭХ НЭР")
                 OutlinedTextField(
@@ -162,9 +161,8 @@ fun LoginScreen(){
                     singleLine = true
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
-                // FREQUENCY KEY
                 AuthInputFieldLabel("НУУЦ ҮГ")
                 OutlinedTextField(
                     value = password,
@@ -176,8 +174,7 @@ fun LoginScreen(){
                     shape = RoundedCornerShape(12.dp),
                     singleLine = true
                 )
-
-                Spacer(modifier = Modifier.height(48.dp))
+                Spacer(modifier = Modifier.height(30.dp))
 
                 if (isLoading) {
                     CircularProgressIndicator(color = Color(0xFFA78BFA))
@@ -209,7 +206,7 @@ fun LoginScreen(){
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(64.dp)
+                            .height(60.dp)
                             .clip(RoundedCornerShape(16.dp))
                             .background(authGradient),
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -224,7 +221,7 @@ fun LoginScreen(){
                     }
                 }
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 Text(
                     "НУУЦ ҮГЭЭ МАРТЧИХСАН УУ?",
@@ -233,9 +230,9 @@ fun LoginScreen(){
                     fontWeight = FontWeight.Bold
                 )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(10.dp))
                 Box(modifier = Modifier.width(40.dp).height(1.dp).background(Color(0xFF262626)))
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Row {
                     Text("Шинэ гишүүн үү? ", color = Color(0xFF6B7280), fontSize = 12.sp)

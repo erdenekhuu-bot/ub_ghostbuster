@@ -224,10 +224,7 @@ fun SignUpScreen(){
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-
-                Spacer(modifier = Modifier.height(20.dp))
                 Box(modifier = Modifier.width(40.dp).height(1.dp).background(Color(0xFF262626)))
-                Spacer(modifier = Modifier.height(20.dp))
 
                 Row {
                     Text("Бүртгэлтэй гишүүн үү? ", color = Color(0xFF6B7280), fontSize = 12.sp)
