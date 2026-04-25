@@ -186,21 +186,15 @@ fun LoginScreen(){
                         onClick = {
                             isLoading = true
                             scope.launch {
-                                try {
-                                    val apiService = RetrofitCLient().getInstance().create(APIClient::class.java)
-                                    val request = LoginRequest(username, password)
-                                    val response = apiService.login(request)
-                                    if (response.isSuccessful) {
-                                        val loginResponse = response.body()
-                                        loginResponse?.tokens?.let { tokens ->
-                                            sessionManager.saveTokens(tokens.access, tokens.refresh)
-                                            context.startActivity(Intent(context, HomeActivity::class.java))
-                                        }
+                                val apiService = RetrofitCLient().getInstance().create(APIClient::class.java)
+                                val request = LoginRequest(username, password)
+                                val response = apiService.login(request)
+                                if (response.isSuccessful) {
+                                    val loginResponse = response.body()
+                                    loginResponse?.tokens?.let { tokens ->
+                                        sessionManager.saveTokens(tokens.access, tokens.refresh)
+                                        context.startActivity(Intent(context, HomeActivity::class.java))
                                     }
-                                } catch (e: Exception) {
-                                    Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-                                } finally {
-                                    isLoading = false
                                 }
                             }
                         },

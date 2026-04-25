@@ -50,10 +50,8 @@ import kotlinx.coroutines.launch
 import mn.erdenee.mn_ghostbuster.api.APIClient
 import mn.erdenee.mn_ghostbuster.api.RetrofitCLient
 import mn.erdenee.mn_ghostbuster.types.UserResult
-import mn.erdenee.mn_ghostbuster.ui.BoxUI
 import mn.erdenee.mn_ghostbuster.api.SessionManager
-import mn.erdenee.mn_ghostbuster.types.LocationResult
-import mn.erdenee.mn_ghostbuster.types.MemberResponse
+
 
 
 class MemberActivity : AppCompatActivity() {
@@ -117,12 +115,6 @@ fun MemberScreen() {
             items(members) { item ->
                 InvestigationCard(item)
             }
-//            items(members) { member ->
-//                BoxUI(
-//                    title = member.username,
-//                    content = member.member?.status ?: ""
-//                )
-//            }
 
             item {
                 LaunchedEffect(members.size) {
@@ -144,7 +136,7 @@ fun MemberScreen() {
 }
 
 @Composable
-fun InvestigationCard(item: UserResult) { // Changed from MemberResponse to UserResult
+fun InvestigationCard(item: UserResult) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -162,13 +154,6 @@ fun InvestigationCard(item: UserResult) { // Changed from MemberResponse to User
                         .height(200.dp),
                     contentScale = ContentScale.Crop
                 )
-
-                // Badges
-                Row(modifier = Modifier.padding(12.dp)) {
-                    Badge("EXTREME", Color(0xFFEF4444))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    LiveScanBadge()
-                }
             }
 
             Column(modifier = Modifier.padding(16.dp)) {
@@ -178,7 +163,7 @@ fun InvestigationCard(item: UserResult) { // Changed from MemberResponse to User
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        item.username, // Now correctly accessible from UserResult
+                        item.username,
                         color = Color.White,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
@@ -197,12 +182,27 @@ fun InvestigationCard(item: UserResult) { // Changed from MemberResponse to User
                     Icon(Icons.Default.LocationOn, contentDescription = null, tint = Color.Gray, modifier = Modifier.size(14.dp))
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        item.member?.status ?: "UNKNOWN", // Accessed via member property
+                        item.member?.status ?: "UNKNOWN",
                         color = Color.Gray,
                         fontSize = 12.sp
                     )
                 }
             }
         }
+    }
+}
+
+
+@Composable
+fun HeaderSection() {
+    Column(modifier = Modifier.padding(vertical = 16.dp)) {
+        Text(
+            "Бүртгэл",
+            color = Color.White,
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold,
+            lineHeight = 36.sp
+        )
+        Spacer(modifier = Modifier.height(24.dp))
     }
 }

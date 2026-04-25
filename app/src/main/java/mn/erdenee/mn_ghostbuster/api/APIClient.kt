@@ -14,11 +14,9 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Query
-
 interface APIClient {
     @POST("login/")
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
-
     @GET("members/")
     suspend fun members(
         @Header("Authorization") token: String,
@@ -50,6 +48,9 @@ interface APIClient {
 
     @POST("register/")
     suspend fun register(@Body requestBody: RegisterRequest): Response<RegisterResponse>
+
+    @POST("logout/")
+    suspend fun logout(@Body requestBody: LogoutRequest): Response<LogoutResponse>
 }
 class RetrofitCLient {
     private val baseUrl = "https://ghostbuster-e0mz.onrender.com/api/"

@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 import mn.erdenee.mn_ghostbuster.api.APIClient
 import mn.erdenee.mn_ghostbuster.api.RetrofitCLient
 import mn.erdenee.mn_ghostbuster.api.SessionManager
+import mn.erdenee.mn_ghostbuster.types.CaseBody
 import mn.erdenee.mn_ghostbuster.types.LocationResult
 
 class MapActivity : AppCompatActivity() {
@@ -47,7 +48,7 @@ class MapActivity : AppCompatActivity() {
 @Composable
 fun MapScreen() {
     val apiService = remember { RetrofitCLient().getInstance().create(APIClient::class.java) }
-    val locations = remember { mutableStateListOf<LocationResult>() }
+    val locations = remember { mutableStateListOf<CaseBody>() }
     var selectedLocation by remember { mutableStateOf<LocationResult?>(null) }
 
     var page by remember { mutableIntStateOf(1) }

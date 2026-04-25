@@ -27,6 +27,9 @@
         android:theme="@style/Theme.MyApplication"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".screen.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".screen.signup.SignUpActivity"
             android:exported="false" />
 

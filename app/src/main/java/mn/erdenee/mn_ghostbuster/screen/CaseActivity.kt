@@ -2,16 +2,12 @@ package mn.erdenee.mn_ghostbuster.screen
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -31,9 +27,9 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import mn.erdenee.mn_ghostbuster.api.APIClient
-import mn.erdenee.mn_ghostbuster.types.LocationResult
 import mn.erdenee.mn_ghostbuster.api.RetrofitCLient
 import mn.erdenee.mn_ghostbuster.api.SessionManager
+import mn.erdenee.mn_ghostbuster.types.CaseBody
 
 class CaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +52,7 @@ class CaseActivity : AppCompatActivity() {
 fun CaseScreen() {
     val apiService = remember { RetrofitCLient().getInstance().create(APIClient::class.java) }
 
-    val locations = remember { mutableStateListOf<LocationResult>() }
+    val locations = remember { mutableStateListOf<CaseBody>() }
     var page by remember { mutableIntStateOf(1) }
     var canLoadMore by remember { mutableStateOf(true) }
     var isLoading by remember { mutableStateOf(false) }
@@ -116,10 +112,6 @@ fun CaseScreen() {
                 .padding(padding),
             contentPadding = PaddingValues(16.dp)
         ) {
-            item {
-                HeaderSection()
-            }
-
             items(locations) { item ->
                 InvestigationCard(item)
             }
@@ -163,28 +155,7 @@ fun TopBar() {
 }
 
 @Composable
-fun HeaderSection() {
-    Column(modifier = Modifier.padding(vertical = 16.dp)) {
-        Text(
-            "Active\nInvestigations",
-            color = Color.White,
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            lineHeight = 36.sp
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            "ARCHIVE FREQUENCY: 432HZ",
-            color = Color.Gray,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-    }
-}
-
-@Composable
-fun InvestigationCard(item: LocationResult) {
+fun InvestigationCard(item: CaseBody) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -195,20 +166,13 @@ fun InvestigationCard(item: LocationResult) {
         Column {
             Box {
                 AsyncImage(
-                    model = "https://images.unsplash.com/photo-1509248961158-e54f6934749c",
+                    model = "${item.image.file}",
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp),
                     contentScale = ContentScale.Crop
                 )
-
-                // Badges
-                Row(modifier = Modifier.padding(12.dp)) {
-                    Badge("EXTREME", Color(0xFFEF4444))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    LiveScanBadge()
-                }
             }
 
             Column(modifier = Modifier.padding(16.dp)) {
@@ -224,11 +188,6 @@ fun InvestigationCard(item: LocationResult) {
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.weight(1f)
                     )
-                    Column(horizontalAlignment = Alignment.End) {
-                        Text("SPECTRAL", color = Color.Gray, fontSize = 8.sp)
-                        Text("SIGNATURE", color = Color.Gray, fontSize = 8.sp)
-                        Text("9.2mHz", color = Color(0xFF4ADE80), fontWeight = FontWeight.Bold)
-                    }
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -237,54 +196,12 @@ fun InvestigationCard(item: LocationResult) {
                     Icon(Icons.Default.LocationOn, contentDescription = null, tint = Color.Gray, modifier = Modifier.size(14.dp))
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        item.address ?: "UNKNOWN LOCATION",
+                        item.address ?: "",
                         color = Color.Gray,
                         fontSize = 12.sp
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun Badge(text: String, color: Color) {
-    Surface(
-        color = color,
-        shape = RoundedCornerShape(50),
-        modifier = Modifier.height(20.dp)
-    ) {
-        Text(
-            text,
-            color = Color.White,
-            fontSize = 9.sp,
-            fontWeight = FontWeight.Black,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-        )
-    }
-}
-
-@Composable
-fun LiveScanBadge() {
-    Surface(
-        color = Color.Transparent,
-        shape = RoundedCornerShape(50),
-        modifier = Modifier
-            .height(20.dp)
-            .border(1.dp, Color(0xFF99FF00), RoundedCornerShape(50))
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 8.dp)
-        ) {
-            Box(modifier = Modifier.size(4.dp).background(Color(0xFF99FF00), CircleShape))
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                "LIVE SCAN",
-                color = Color(0xFF99FF00),
-                fontSize = 9.sp,
-                fontWeight = FontWeight.Black
-            )
         }
     }
 }

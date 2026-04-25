@@ -2,7 +2,6 @@ package mn.erdenee.mn_ghostbuster.screen.signup
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import mn.erdenee.mn_ghostbuster.R
 import androidx.activity.compose.setContent
@@ -190,19 +189,11 @@ fun SignUpScreen(){
                     )
                     Button(
                         onClick = {
-                            isLoading = true
                             scope.launch {
-                               try {
-                                   val apiService = RetrofitCLient().getInstance().create(APIClient::class.java)
-                                   val request = RegisterRequest(username, password,phone)
-                                   val response = apiService.register(request)
-                                   if(response.isSuccessful) context.startActivity(Intent(context, LoginActivity::class.java))
-
-                               } catch (e: Exception){
-                                   Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-                               } finally {
-                                   isLoading = false
-                               }
+                                val apiService = RetrofitCLient().getInstance().create(APIClient::class.java)
+                                val request = RegisterRequest(username, password,phone)
+                                val response = apiService.register(request)
+                                if(response.isSuccessful) context.startActivity(Intent(context, LoginActivity::class.java))
                             }
                         },
                         modifier = Modifier
@@ -233,9 +224,7 @@ fun SignUpScreen(){
                     })
                 }
             }
-
             Spacer(modifier = Modifier.weight(1f))
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -250,7 +239,6 @@ fun SignUpScreen(){
         }
     }
 }
-
 @Composable
 private fun AuthInputFieldLabel(text: String) {
     Text(
