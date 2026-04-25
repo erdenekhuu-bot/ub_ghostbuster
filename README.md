@@ -1,17 +1,14 @@
-This is just idea. Just going on haunted town then take pictore add coordinate to render.com (means Django db.sqlite) 
+# Kotlin Compose Experiment (with Gemini AI)
 
-Kotlin compose i liked. i tell truth i no alone. Google gemini was with me. I thought AI more than vibe coders. 
+## About
+This project is my first experiment with Jetpack Compose.
+I built a simple idea-based app while learning Kotlin and exploring how AI (Google Gemini) can assist development.
 
-But i don't have VPS i tested render.com . But render would down usually.
+## What I tried
+- Basic UI with Jetpack Compose
+- Taking photo / video concept
+- Adding GPS coordinate idea
+- Thinking about backend integration (Render.com + Django)
 
-But i loved kotlin compose. I think more than flutter. 
-
-Google play store would reject may never accept
-
-But may be still i vibe coder
-
-Rule 1. Register on your account
-
-Rule 2. Looking for ghosted town
-
-Rule 3. Take the picture shot or take video. Then add coordinate then submit. That's enough.
+## Notes
+This is not a production project. Just a learning experiment.
